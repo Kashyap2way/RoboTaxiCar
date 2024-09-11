@@ -5,8 +5,8 @@
 #define MAX_DISTANCE 400  // Max distance for ultrasonic sensors
 
 // Define TRIG and ECHO pins for 6 sensors
-#define TRIG_PIN_1 15
-#define ECHO_PIN_1 22
+#define TRIG_PIN_1 22
+#define ECHO_PIN_1 23
 #define TRIG_PIN_2 2
 #define ECHO_PIN_2 4
 #define TRIG_PIN_3 16
@@ -15,8 +15,8 @@
 #define ECHO_PIN_4 18
 #define TRIG_PIN_5 19
 #define ECHO_PIN_5 21
-#define TRIG_PIN_6 22
-#define ECHO_PIN_6 23
+#define TRIG_PIN_6 32
+#define ECHO_PIN_6 35
 
 // Define Servo and ESC pins
 #define SERVO_PIN_1 13
@@ -78,15 +78,23 @@ for (pos = 120; pos >= 80; pos -= 1) {
 // Control ESCs with mapped values (example: control based on ultrasonic sensor input)
 int distance1 = sonar1.ping_cm();
 int distance2 = sonar2.ping_cm();
-int esc1Throttle = map(distance1, 0, 100, 1000, 2000);  // Map distance to throttle
-int esc2Throttle = map(distance2, 0, 100, 1000, 2000);
+int distance3 = sonar3.ping_cm();
+int distance4 = sonar4.ping_cm();
+int distance5 = sonar5.ping_cm();
+int distance6 = sonar6.ping_cm();
+//int esc1Throttle = map(distance1, 0, 100, 1000, 2000);  // Map distance to throttle
+//int esc2Throttle = map(distance2, 0, 100, 1000, 2000);
 
-esc1.writeMicroseconds(esc1Throttle);  // Set throttle for ESC 1
-esc2.writeMicroseconds(esc2Throttle);  // Set throttle for ESC 2
+//esc1.writeMicroseconds(esc1Throttle);  // Set throttle for ESC 1
+//esc2.writeMicroseconds(esc2Throttle);  // Set throttle for ESC 2
 
 // Log distances for debugging
-Serial.print("Distance Sensor 1: "); Serial.print(distance1); Serial.println(" cm");
-Serial.print("Distance Sensor 2: "); Serial.print(distance2); Serial.println(" cm");
+Serial.print("1: "); Serial.print(distance1); Serial.print(" cm, ");
+Serial.print("2: "); Serial.print(distance2); Serial.print(" cm, ");
+Serial.print("3: "); Serial.print(distance3); Serial.print("cm, ");
+Serial.print("4: "); Serial.print(distance4); Serial.print(" cm, ");
+Serial.print("5: "); Serial.print(distance5); Serial.print(" cm, ");
+Serial.print("6: "); Serial.print(distance6); Serial.println("cm");
 
-delay(1000);  // Delay between updates
+delay(100);  // Delay between updates
 }

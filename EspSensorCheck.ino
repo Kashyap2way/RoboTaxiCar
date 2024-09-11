@@ -5,24 +5,24 @@
 #define MAX_DISTANCE 400  // Max distance for ultrasonic sensors
 
 // Define TRIG and ECHO pins for 6 sensors
-#define TRIG_PIN_1 13, 15
-#define ECHO_PIN_1 19, 22
-#define TRIG_PIN_2 14, 2
-#define ECHO_PIN_2 21, 4
-#define TRIG_PIN_3 15, 16
-#define ECHO_PIN_3 22, 17
-#define TRIG_PIN_4 16, 5
-#define ECHO_PIN_4 23, 18
-#define TRIG_PIN_5 17, 19
-#define ECHO_PIN_5 25, 21
-#define TRIG_PIN_6 18, 22
-#define ECHO_PIN_6 26, 23
+#define TRIG_PIN_1 15
+#define ECHO_PIN_1 22
+#define TRIG_PIN_2 2
+#define ECHO_PIN_2 4
+#define TRIG_PIN_3 16
+#define ECHO_PIN_3 17
+#define TRIG_PIN_4 5
+#define ECHO_PIN_4 18
+#define TRIG_PIN_5 19
+#define ECHO_PIN_5 21
+#define TRIG_PIN_6 22
+#define ECHO_PIN_6 23
 
 // Define Servo and ESC pins
-#define SERVO_PIN_1 27, 13
-#define SERVO_PIN_2 32, 12
-#define ESC_PIN_1 33, 26
-#define ESC_PIN_2 34, 25
+#define SERVO_PIN_1 13
+#define SERVO_PIN_2 12
+#define ESC_PIN_1 26
+#define ESC_PIN_2 25
 
 // Create sensor objects for the ultrasonic sensors
 NewPing sonar1(TRIG_PIN_1, ECHO_PIN_1, MAX_DISTANCE);
@@ -63,13 +63,13 @@ esc2.attach(ESC_PIN_2, 1000, 2000);
 
 void loop() {
 // Sweep the servos between 0 and 180 degrees
-for (pos = 0; pos <= 180; pos += 1) {
+for (pos = 80; pos <= 120; pos += 1) {
     servo1.write(pos);
     servo2.write(pos);
     delay(15);
 }
 
-for (pos = 180; pos >= 0; pos -= 1) {
+for (pos = 120; pos >= 80; pos -= 1) {
     servo1.write(pos);
     servo2.write(pos);
     delay(15);

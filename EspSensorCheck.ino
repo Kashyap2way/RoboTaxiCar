@@ -82,11 +82,11 @@ int distance3 = sonar3.ping_cm();
 int distance4 = sonar4.ping_cm();
 int distance5 = sonar5.ping_cm();
 int distance6 = sonar6.ping_cm();
-//int esc1Throttle = map(distance1, 0, 100, 1000, 2000);  // Map distance to throttle
-//int esc2Throttle = map(distance2, 0, 100, 1000, 2000);
+int esc1Throttle = map(30, 0, 100, 1000, 2000);  // Map distance to throttle
+int esc2Throttle = map(30, 0, 100, 1000, 2000);
 
-//esc1.writeMicroseconds(esc1Throttle);  // Set throttle for ESC 1
-//esc2.writeMicroseconds(esc2Throttle);  // Set throttle for ESC 2
+esc1.writeMicroseconds(esc1Throttle);  // Set throttle for ESC 1
+esc2.writeMicroseconds(esc2Throttle);  // Set throttle for ESC 2
 
 // Log distances for debugging
 Serial.print("1: "); Serial.print(distance1); Serial.print(" cm, ");
@@ -94,7 +94,9 @@ Serial.print("2: "); Serial.print(distance2); Serial.print(" cm, ");
 Serial.print("3: "); Serial.print(distance3); Serial.print("cm, ");
 Serial.print("4: "); Serial.print(distance4); Serial.print(" cm, ");
 Serial.print("5: "); Serial.print(distance5); Serial.print(" cm, ");
-Serial.print("6: "); Serial.print(distance6); Serial.println("cm");
+Serial.print("6: "); Serial.print(distance6); Serial.print("cm, ");
+Serial.print("M1: "); Serial.print(esc1Throttle); Serial.print("%, ");
+Serial.print("M2: "); Serial.print(esc2Throttle); Serial.println("%");
 
 delay(100);  // Delay between updates
 }

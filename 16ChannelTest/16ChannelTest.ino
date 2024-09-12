@@ -14,9 +14,9 @@ TwoWire I2Cone = TwoWire(0);
 
 // Servo channels
 #define SERVO_1_CHANNEL 0  // Servo 1 connected to PCA9685 channel 0
-#define SERVO_2_CHANNEL 1  // Servo 2 connected to PCA9685 channel 1
-#define SERVO_3_CHANNEL 2  // Servo 3 connected to PCA9685 channel 2
-#define SERVO_4_CHANNEL 3  // Servo 4 connected to PCA9685 channel 3
+#define SERVO_2_CHANNEL 4  // Servo 2 connected to PCA9685 channel 1
+#define SERVO_3_CHANNEL 8  // Servo 3 connected to PCA9685 channel 2
+#define SERVO_4_CHANNEL 12  // Servo 4 connected to PCA9685 channel 3
 
 // Function to convert angle to pulse length for servos
 int angleToPulse(int angle) {
@@ -33,8 +33,14 @@ void setup() {
 
   I2Cone.begin(SDA_1, SCL_1, 100000); 
   // Initialize the PWM driver (without the second argument)
-  pwm.begin();
-  
+  bool status1 = pwm.begin();
+  if (!status1) {
+    Serial.println("Failed to find 16Channel chip");
+    while (1) {
+      delay(10);
+    }
+  }
+
   Serial.println("16 channel Servo test!");
   
   // Set the PWM frequency to 60 Hz

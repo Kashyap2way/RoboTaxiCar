@@ -1,48 +1,65 @@
-#include <Wire.h>
-#include <Adafruit_PWMServoDriver.h>
+#include <WiFi.h>
+#include <HTTPClient.h>
+#include <ArduinoJson.h>
 
-// Create PCA9685 object
-Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
-
-const int escChannel1 = 0;  // ESC connected to channel 0
-const int escChannel2 = 1; 
-const int minPulseWidth = 600;  // 1000 µs (1 ms) corresponds to 0% throttle
-const int maxPulseWidth = 2500;  // 2000 µs (2 ms) corresponds to 100% throttle
+const char* ssid = "YOUR_SSID";
+const char* password = "YOUR_PASSWORD";
+const char* serverName = "mongodb+srv://kashyapmistry2021:ws7Gqbfgy3*hQZ5@db1cluster1.skf8r.mongodb.net/?retryWrites=true&w=majority&appName=DB1Cluster1";
 
 void setup() {
   Serial.begin(115200);
-  
-  // Initialize PCA9685 and set PWM frequency to 50 Hz
-  pwm.begin();
-  pwm.setPWMFreq(50);
-  
-  delay(10);  // Allow PCA9685 to initialize
-  Serial.println("Starting Calibration for 2 sec");
-  
-  // Arm ESC by sending minimum throttle signal
-  setESC(escChannel1, 1000);
-  setESC(escChannel2, 1000);
-  delay(2000);  // Give ESC time to arm
+
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to WiFi");
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("Connected to WiFi");
+
+  HTTPClient http;
+  http.begin(serverName);
+  int httpCode = http.GET();
+
+  if (httpCode > 0) {
+    String payload = http.getString();
+    Serial.println("Response:");
+    Serial.println(payload);
+
+    // Parse JSON
+    DynamicJsonDocument doc(1024); // Adjust size as needed
+    DeserializationError error = deserializeJson(doc, payload);
+
+    if (error) {
+      Serial.print("deserializeJson() failed: ");
+      Serial.println(error.c_str());
+      return;
+    }
+
+    // Assuming the JSON response is an array of rides
+    for (JsonObject ride : doc.as<JsonArray>()) {
+      String name = ride["name"].as<String>();
+      String pickup = ride["pickup"].as<String>();
+      String destination = ride["destination"].as<String>();
+
+      Serial.println("Ride:");
+      Serial.print("Name: ");
+      Serial.println(name);
+      Serial.print("Pickup: ");
+      Serial.println(pickup);
+      Serial.print("Destination: ");
+      Serial.println(destination);
+    }
+
+  } else {
+    Serial.println("Error on HTTP request");
+  }
+
+  http.end();
 }
 
 void loop() {
-
-  // Set motor speed to 100%
-  Serial.println("Going for Full Throtle");
-  setESC(escChannel1, calculatePulseWidth(70));
-  setESC(escChannel2, calculatePulseWidth(70));
-
-  // Keep motor running at 100%
-  while (true);
-}
-
-// Function to convert percentage to pulse width in microseconds
-int calculatePulseWidth(int percent) {
-  return map(percent, 0, 100, minPulseWidth, maxPulseWidth);
-}
-
-// Function to send PWM signal to ESC
-void setESC(int channel, int pulseWidth) {
-  int pulseLength = map(pulseWidth, 0, 20000, 0, 4096);  // Convert to 12-bit value
-  pwm.setPWM(channel, 0, pulseLength);
+  // Empty loop
 }
